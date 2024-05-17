@@ -1,0 +1,9 @@
+keys:
+  - &admin_daniel age1w3au446flcrpaa0ywwt4dkxgnwp3ntpc3hdghrjxpy72a073fdkszc7088
+  - &server_ogma age198svl5c35xzx527kdx0gj8z0ufn58zg6u7cgp3c2et8w9fx3393szcn0q2
+creation_rules:
+  - path_regex: hosts/ogma/[^/]+\.(yaml|json|env|ini|hjson)$
+    key_groups:
+    - age:
+      - *admin_daniel
+      - *server_ogma
