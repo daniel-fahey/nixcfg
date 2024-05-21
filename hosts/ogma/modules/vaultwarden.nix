@@ -30,4 +30,22 @@
     restartUnits = [ "vaultwarden.service" ];
   };
 
+  services.fail2ban.jails = {
+    vaultwarden-auth = {
+      settings = {
+        enabled = true;
+        port = "http,https";
+        filter = "vaultwarden-auth";
+        backend = "systemd";
+        maxretry = 3;
+        bantime = "1h";
+        action = "iptables-multiport[name=HTTP, port=\"http,https\"]";
+      };
+    };
+  };
+
+  environment.etc."fail2ban/filter.d/vaultwarden-auth.conf".text = ''
+    [Definition]
+    failregex = ^.*(Username or password is incorrect\. Try again|Invalid admin token)\. IP: <HOST>.*$
+  '';
 }

@@ -64,6 +64,8 @@
     };
   };
 
+  services.fail2ban.enable = true;
+
   environment.variables.EDITOR = "vim";
 
   networking = {

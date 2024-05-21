@@ -28,4 +28,18 @@
     restartUnits = [ "nginx.service" ];
   };
 
+  services.fail2ban.jails = {
+    nginx-basic-auth = {
+      settings = {
+        enabled = true;
+        port = "http,https";
+        filter = "nginx-http-auth";
+        backend = "systemd";
+        maxretry = 3;
+        bantime = "1h";
+        action = "iptables-multiport[name=HTTP, port=\"http,https\"]";
+      };
+    };
+  };
+
 }
