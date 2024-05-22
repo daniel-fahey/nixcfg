@@ -21,7 +21,7 @@
       system = "x86_64-linux";
       specialArgs = { inherit secrets; };
       modules = [
-        ./hosts/ogma/configuration.nix
+        ./nixos/ogma/configuration.nix
         disko.nixosModules.disko
         sops-nix.nixosModules.sops
       ];
