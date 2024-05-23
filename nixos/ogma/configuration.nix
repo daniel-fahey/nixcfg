@@ -9,9 +9,10 @@
   imports = [
     ./hardware-configuration.nix
     ./disk-config.nix
+    ./modules/borg.nix
     ./modules/nginx.nix
-    ./modules/xandikos.nix
     ./modules/vaultwarden.nix
+    ./modules/xandikos.nix
     ./modules/yggdrasil.nix
   ];
 

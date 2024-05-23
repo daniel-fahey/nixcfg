@@ -10,6 +10,7 @@
       DOMAIN = "https://vault.${secrets.ogma.domain}";
       SIGNUPS_ALLOWED = false;
     };
+    backupDir = "/var/backup/vaultwarden";
   };
 
   services.nginx = {
