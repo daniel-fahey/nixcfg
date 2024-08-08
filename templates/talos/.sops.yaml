@@ -1,0 +1,7 @@
+keys:
+  - &daniel age1w3au446flcrpaa0ywwt4dkxgnwp3ntpc3hdghrjxpy72a073fdkszc7088
+creation_rules:
+  - path_regex: secrets\.yaml$
+    key_groups:
+    - age:
+      - *daniel
