@@ -3,10 +3,19 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    hcloud-talos = {
+      url = "github:hcloud-talos/terraform-hcloud-talos/v2.10.0";
+      flake = false;
+    };
   };
 
   outputs =
-    { self, nixpkgs, ... }:
+    {
+      self,
+      nixpkgs,
+      hcloud-talos,
+      ...
+    }:
     let
       forAllSystems =
         function:
@@ -45,10 +54,13 @@
           ];
 
           shellHook = ''
+            mkdir -p .talos .kube
             export TALOSCONFIG="$PWD/.talos/config"
             export KUBECONFIG="$PWD/.kube/config"
             export HCLOUD_TOKEN=$(${pkgs.sops}/bin/sops -d secrets.yaml | ${pkgs.yq-go}/bin/yq -r .hcloud_token)
             export TF_VAR_hcloud_token=$HCLOUD_TOKEN
+
+            cp -f ${hcloud-talos}/_packer/talos-hcloud.pkr.hcl .
           '';
         };
       });

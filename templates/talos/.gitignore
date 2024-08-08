@@ -1,6 +1,8 @@
 .direnv/
 .envrc
 .kube/
-.minikube/
 .terraform/
+.talos/
 
+talos-hcloud.pkr.hcl
+terraform.tfstate

@@ -1,5 +1,22 @@
 {
   "nodes": {
+    "hcloud-talos": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1723038946,
+        "narHash": "sha256-qt6lrULk/iBVqB5O1V0atL3JyA7Z0H0Dm/54jLa19yM=",
+        "owner": "hcloud-talos",
+        "repo": "terraform-hcloud-talos",
+        "rev": "65178aee3d0def0cc8cff6b63056c30f44a5345a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "hcloud-talos",
+        "ref": "v2.10.0",
+        "repo": "terraform-hcloud-talos",
+        "type": "github"
+      }
+    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1722813957,
@@ -18,6 +35,7 @@
     },
     "root": {
       "inputs": {
+        "hcloud-talos": "hcloud-talos",
         "nixpkgs": "nixpkgs"
       }
     }
