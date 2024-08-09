@@ -14,6 +14,9 @@
     ./modules/vaultwarden.nix
     ./modules/xandikos.nix
     ./modules/yggdrasil.nix
+    ./modules/photoprism.nix
+    ./modules/syncthing.nix
+    ./modules/photoprism-import.nix
   ];
 
   # This will add secrets.yaml to the nix store
