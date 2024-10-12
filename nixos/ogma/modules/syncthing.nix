@@ -30,6 +30,16 @@
           rescanIntervalS = 3600;
           type = "receiveonly";
         };
+        AIFF = {
+          enable = true;
+          id = secrets.syncthing.folders.AIFF;
+          path = "~/AIFF";
+          devices = [
+            "helios64"
+          ];
+          rescanIntervalS = 3600;
+          type = "receiveonly";
+        };
       };
     };
   };
