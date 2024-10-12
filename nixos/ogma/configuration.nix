@@ -17,6 +17,9 @@
     ./modules/photoprism.nix
     ./modules/syncthing.nix
     ./modules/photoprism-import.nix
+    # ./modules/davis.nix
+    # ./modules/stalwart.nix
+    ./modules/refused-connections.nix
   ];
 
   # This will add secrets.yaml to the nix store
