@@ -9,7 +9,7 @@
 
   services.nextcloud = {
     enable = true;
-    package = pkgs.nextcloud30;
+    package = pkgs.nextcloud29;
     hostName = "cloud.${secrets.ogma.additional_domain}";
     https = true;
     database.createLocally = true;
@@ -19,8 +19,9 @@
     };
     extraApps = {
       inherit (config.services.nextcloud.package.packages.apps)
-      memories cospend deck calendar contacts tasks notes polls registration spreed;
-      # maps forms # missing from pkgs.nextcloud30, but available in pkgs.nextcloud29
+      memories cospend deck calendar contacts tasks notes polls registration spreed
+      # missing from pkgs.nextcloud30, but available in pkgs.nextcloud29:
+      maps forms;
     };
     extraAppsEnable = true;
     configureRedis = true;
