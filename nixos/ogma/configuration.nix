@@ -20,6 +20,7 @@
     # ./modules/davis.nix
     # ./modules/stalwart.nix
     ./modules/refused-connections.nix
+    ./modules/nextcloud.nix
   ];
 
   # This will add secrets.yaml to the nix store
