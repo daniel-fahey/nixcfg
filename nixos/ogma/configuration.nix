@@ -80,12 +80,28 @@
   networking = {
     hostName = "ogma";
     interfaces = {
-      eno1.ipv6.addresses = [
-        {
-          address = secrets.ogma.ipv6_address;
-          prefixLength = 64;
-        }
-      ];
+      eno1 = {
+        ipv4.addresses = [
+          {
+            address = secrets.ogma.ipv4_address;
+            prefixLength = 24;
+          }
+          {
+            address = secrets.ogma.additional_ipv4_address;
+            prefixLength = 24;
+          }
+        ];
+        ipv6.addresses = [
+          {
+            address = secrets.ogma.ipv6_address;
+            prefixLength = 64;
+          }
+        ];
+      };
+    };
+    defaultGateway = {
+      address = secrets.ogma.ipv4_gateway;
+      interface = "eno1";
     };
     defaultGateway6 = {
       address = secrets.ogma.ipv6_gateway;
