@@ -79,6 +79,7 @@
 
   networking = {
     hostName = "ogma";
+    nameservers = [ "1.1.1.1" "8.8.8.8" ];  # Cloudflare and Google DNS servers, TODO https://www.privacyguides.org/en/dns/
     interfaces = {
       eno1 = {
         ipv4.addresses = [
@@ -98,6 +99,7 @@
           }
         ];
       };
+      eno2.useDHCP = false;
     };
     defaultGateway = {
       address = secrets.ogma.ipv4_gateway;
@@ -138,6 +140,7 @@
     unibilium
     kitty
     git-crypt
+    dig
   ];
 
   services.btrfs.autoScrub = {
