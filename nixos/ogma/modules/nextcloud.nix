@@ -19,7 +19,8 @@
     };
     extraApps = {
       inherit (config.services.nextcloud.package.packages.apps)
-      memories cospend deck calendar contacts tasks notes polls registration spreed
+      memories cospend deck calendar contacts tasks notes polls spreed
+      # registration # disabled
       # missing from pkgs.nextcloud30, but available in pkgs.nextcloud29:
       maps forms;
     };
