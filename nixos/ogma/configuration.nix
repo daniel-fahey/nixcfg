@@ -18,7 +18,7 @@
     ./modules/syncthing.nix
     ./modules/photoprism-import.nix
     # ./modules/davis.nix
-    # ./modules/stalwart.nix
+    ./modules/stalwart.nix
     ./modules/refused-connections.nix
     ./modules/nextcloud.nix
   ];
