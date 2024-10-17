@@ -9,12 +9,12 @@
     ];
     nginx = {
       enable = true;
-      hostName = "dav.${secrets.ogma.domain}";
+      hostName = "dav.${secrets.ogma.additional_domain}";
     };
   };
 
   services.nginx = {
-    virtualHosts."dav.${secrets.ogma.domain}" = {
+    virtualHosts."dav.${secrets.ogma.additional_domain}" = {
       forceSSL = true;
       enableACME = true;
       basicAuthFile = config.sops.secrets.dav_htpasswd.path;

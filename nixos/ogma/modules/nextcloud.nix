@@ -10,7 +10,7 @@
   services.nextcloud = {
     enable = true;
     package = pkgs.nextcloud29;
-    hostName = "cloud.${secrets.ogma.additional_domain}";
+    hostName = "cloud.${secrets.ogma.domain}";
     https = true;
     database.createLocally = true;
     config = {
@@ -30,7 +30,7 @@
 
   services.nginx.virtualHosts."${config.services.nextcloud.hostName}" = {
     forceSSL = true;
-    useACMEHost = secrets.ogma.additional_domain;
+    useACMEHost = secrets.ogma.domain;
   };
   
 

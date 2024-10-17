@@ -4,14 +4,14 @@
     acceptTerms = true;
     defaults.email = secrets.acme.email;
     # defaults.server = "https://acme-staging-v02.api.letsencrypt.org/directory"; # Staging
-    certs."${secrets.ogma.additional_domain}" = {
+    certs."${secrets.ogma.domain}" = {
       extraDomainNames = [ 
-        "mx1.${secrets.ogma.additional_domain}"
-        "mail.${secrets.ogma.additional_domain}"
-        "mta-sts.${secrets.ogma.additional_domain}"
-        "autoconfig.${secrets.ogma.additional_domain}"
-        "autodiscover.${secrets.ogma.additional_domain}"
-        "cloud.${secrets.ogma.additional_domain}"
+        "mx1.${secrets.ogma.domain}"
+        "mail.${secrets.ogma.domain}"
+        "mta-sts.${secrets.ogma.domain}"
+        "autoconfig.${secrets.ogma.domain}"
+        "autodiscover.${secrets.ogma.domain}"
+        "cloud.${secrets.ogma.domain}"
       ];
       group = config.services.nginx.group;
       reloadServices = [ "nginx" "stalwart-mail" ];

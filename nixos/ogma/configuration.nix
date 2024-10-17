@@ -98,6 +98,10 @@
             address = secrets.ogma.ipv6_address;
             prefixLength = 64;
           }
+          {
+            address = "${secrets.ogma.ipv6_address}1";
+            prefixLength = 128;
+          }
         ];
       };
       eno2.useDHCP = false;

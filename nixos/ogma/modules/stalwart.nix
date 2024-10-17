@@ -4,8 +4,10 @@ let
   stalwartSecrets = [
     "admin-secret"
   ];
-  additionalDomain = secrets.ogma.additional_domain;
-  additionalIP = secrets.ogma.additional_ipv4_address;
+  domain = secrets.ogma.domain;
+  ipv4 = secrets.ogma.ipv4_address;
+  ipv6 = secrets.ogma.ipv6_address;
+  
 in
 {
   sops.secrets = builtins.listToAttrs (map (name: {
@@ -22,56 +24,67 @@ in
     package = pkgs.stalwart-mail;
     openFirewall = false;
     settings = {
+      queue.outbound.tls.mta-sts = "optional";
+      session.mta-sts = {
+        mode = "testing";
+        max-age = "7d";
+        mx = [ "mx1.${domain}" ];
+      };
       server = {
-        hostname = "mx1.${additionalDomain}";
+        hostname = "mx1.${domain}";
         tls = {
           enable = true;
         };
         listener = {
+          smtp = {
+            bind = [ "${ipv4}:25" "[${ipv6}1]:25" ];
+            protocol = "smtp";
+          };
           submissions = {
-            bind = "${additionalIP}:465";
+            bind = [ "${ipv4}:465" "[${ipv6}1]:465" ];
             protocol = "smtp";
             tls.implicit = true;
           };
           imaps = {
-            bind = "${additionalIP}:993";
+            bind = [ "${ipv4}:993" "[${ipv6}1]:993" ];
             protocol = "imap";
             tls.implicit = true;
           };
-          http = {
+          https = {
             bind = "[::1]:18080";
+            # bind = [ "${ipv4}:443" "[${ipv6}1]:443" ];
             protocol = "http";
+            # tls.implicit = true;
           };
         };
       };
       lookup.default = {
-        hostname = "mx1.${additionalDomain}";
-        domain = additionalDomain;
+        hostname = "mx1.${domain}";
+        domain = domain;
       };
       authentication.fallback-admin = {
         user = "admin";
         secret = "%{file:${config.sops.secrets."stalwart/admin-secret".path}}%";
       };
       certificate."default" = {
-        cert = "%{file:/var/lib/acme/${additionalDomain}/fullchain.pem}%";
-        private-key = "%{file:/var/lib/acme/${additionalDomain}/key.pem}%";
+        cert = "%{file:/var/lib/acme/${domain}/fullchain.pem}%";
+        private-key = "%{file:/var/lib/acme/${domain}/key.pem}%";
         default = true;
       };
     };
   };
 
   services.nginx = {
-    enable = true;
     virtualHosts = {
-      "webadmin.${additionalDomain}" = {
+      "webadmin.${domain}" = {
         forceSSL = true;
-        useACMEHost = "${additionalDomain}";
+        useACMEHost = "${domain}";
         serverAliases = [
-          "mx1.${additionalDomain}"
-          "mail.${additionalDomain}"
-          "mta-sts.${additionalDomain}"
-          "autoconfig.${additionalDomain}"
-          "autodiscover.${additionalDomain}"
+          "mx1.${domain}"
+          "mail.${domain}"
+          "mta-sts.${domain}"
+          "autoconfig.${domain}"
+          "autodiscover.${domain}"
         ];
         locations."/" = {
           proxyPass = "http://[::1]:18080";
@@ -82,6 +95,7 @@ in
   };
 
   networking.firewall.allowedTCPPorts = [
+    25   # For SMTP
     465  # For SMTPS
     993  # For IMAPS
   ];

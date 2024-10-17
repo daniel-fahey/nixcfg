@@ -7,14 +7,14 @@
     config = {
       ROCKET_ADDRESS = "::1";
       ROCKET_PORT = 8222;
-      DOMAIN = "https://vault.${secrets.ogma.domain}";
+      DOMAIN = "https://vault.${secrets.ogma.additional_domain}";
       SIGNUPS_ALLOWED = false;
     };
     backupDir = "/var/backup/vaultwarden";
   };
 
   services.nginx = {
-    virtualHosts."vault.${secrets.ogma.domain}" = {
+    virtualHosts."vault.${secrets.ogma.additional_domain}" = {
       forceSSL = true;
       enableACME = true;
       locations."/" = {

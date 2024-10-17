@@ -37,7 +37,7 @@
     settings = {
       PHOTOPRISM_ADMIN_USER = "admin";
       PHOTOPRISM_DEFAULT_LOCALE = "en";
-      PHOTOPRISM_SITE_URL = "https://photos.${secrets.ogma.domain}";
+      PHOTOPRISM_SITE_URL = "https://photos.${secrets.ogma.additional_domain}";
       PHOTOPRISM_DISABLE_TLS = "true";
       PHOTOPRISM_DATABASE_DRIVER = "mysql";
       PHOTOPRISM_DATABASE_NAME = "photoprism";
@@ -61,7 +61,7 @@
   };
 
   services.nginx = {
-    virtualHosts."photos.${secrets.ogma.domain}" = {
+    virtualHosts."photos.${secrets.ogma.additional_domain}" = {
       forceSSL = true;
       enableACME = true;
       locations."/" = {
