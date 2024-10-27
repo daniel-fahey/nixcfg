@@ -5,4 +5,6 @@ nixos-rebuild switch \
 --flake .#ogma \
 --target-host root@$(sops -d secrets.yaml | yq -r .ipv4) \
 --build-host root@$(sops -d secrets.yaml | yq -r .ipv4) \
---show-trace
+--show-trace \
+-v \
+--override-input age-key file+file://<(printf %s "$SOPS_AGE_KEY")

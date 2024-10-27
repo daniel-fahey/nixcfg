@@ -10,11 +10,22 @@
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    age-key = {
+      url = "file+file:///dev/null";
+      flake = false;
+    };
   };
 
-  outputs = { self, nixpkgs, disko, sops-nix, ... }:
+  outputs = { self, nixpkgs, disko, sops-nix, age-key, ... }:
   let
-    secrets = builtins.fromJSON (builtins.readFile "${self}/secrets.json");
+    secrets = builtins.fromJSON (builtins.readFile (
+      nixpkgs.legacyPackages.x86_64-linux.runCommand "decrypt-privates" {
+        nativeBuildInputs = [ nixpkgs.legacyPackages.x86_64-linux.sops ];
+      } ''
+        export SOPS_AGE_KEY="$(cat ${age-key.outPath})"
+        sops -d ${self}/privates.json > $out
+      ''
+    ));
   in
   {
     nixosConfigurations.ogma = nixpkgs.lib.nixosSystem {
