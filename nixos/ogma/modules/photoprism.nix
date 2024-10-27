@@ -21,7 +21,6 @@
     "d /persist/media 2770 root media - -"
     "d /persist/media/photoprism 2770 root media - -"
     "d /persist/media/photoprism/originals 2770 root media - -"
-    "d /persist/media/photoprism/import 2770 root media - -"
   ];
 
   services.photoprism = {

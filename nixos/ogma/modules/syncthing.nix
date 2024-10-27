@@ -22,7 +22,7 @@
         PhoneCamera2 = {
           enable = true;
           id = secrets.syncthing.folders.PhoneCamera2;
-          path = "/persist/media/photoprism/import/PhoneCamera2";
+          path = "/persist/media/photoprism/originals/PhoneCamera2";
           devices = [
             "nothing1"
             "helios64"
