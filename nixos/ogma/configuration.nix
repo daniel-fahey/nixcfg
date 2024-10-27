@@ -21,6 +21,7 @@
     ./modules/stalwart.nix
     ./modules/refused-connections.nix
     ./modules/nextcloud.nix
+    ./modules/audiobookshelf.nix
   ];
 
   # This will add secrets.yaml to the nix store

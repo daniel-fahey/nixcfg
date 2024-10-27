@@ -40,6 +40,16 @@
           rescanIntervalS = 3600;
           type = "receiveonly";
         };
+        Libation = {
+          enable = true;
+          id = secrets.syncthing.folders.Libation;
+          path = "~/Libation";
+          devices = [
+            "helios64"
+          ];
+          rescanIntervalS = 3600;
+          type = "receiveonly";
+        };
       };
     };
   };
