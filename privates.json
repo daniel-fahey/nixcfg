@@ -24,12 +24,12 @@
 	"syncthing": {
 		"devices": {
 			"helios64": "ENC[AES256_GCM,data:5Y1jq5nbl4HAKhOMr3EY3n6GE+xyH1pM4H3ZlgQWP2SACKecWpZuFV4vc06C+5GJudEW0JovLaTmIMhpStoF,iv:U1RZsHjb6+FdB5ZEPa0ixB3HOoFvHiU6uiQnKL3qiYU=,tag:bXDA3Aqh8iXKp2uY2wEUEA==,type:str]",
-			"nothing1": "ENC[AES256_GCM,data:svdQyMXr9WEx6k8JL9ezwuWEyGcUchK4ZsBDsPNXrLoqWdEnmlQm50be9/DbahPoY1edZ5qjrd4nr3GypfeS,iv:VGTDVeiEDh+lV+3CiC5OHBjOe7AIHQLy6oEyMeYnqjg=,tag:bUjnFpnrae75u/QbR9i1pw==,type:str]"
+			"nothing1": "ENC[AES256_GCM,data:svdQyMXr9WEx6k8JL9ezwuWEyGcUchK4ZsBDsPNXrLoqWdEnmlQm50be9/DbahPoY1edZ5qjrd4nr3GypfeS,iv:VGTDVeiEDh+lV+3CiC5OHBjOe7AIHQLy6oEyMeYnqjg=,tag:bUjnFpnrae75u/QbR9i1pw==,type:str]",
+			"laptop": "ENC[AES256_GCM,data:3zryZqEWiQ5j0ccn95K2guSQUl4ubQ3gJfEo/dAoND2WaHth+WOPaXEP/ozNrf/l6Vo2hzccRLBpJ5fZkyEp,iv:eYQkPZiAvX1UwMAywWlnkMPHqwAtmLpTSBi4e1BA32g=,tag:HRNx6WOFD6BhptlRz2B0zA==,type:str]"
 		},
 		"folders": {
 			"PhoneCamera2": "ENC[AES256_GCM,data:sK9TVQff9Nf95Xg=,iv:4Uv0/Zdh/CA2uKkLIUPoQ2AhiauLTX52tfBMM4fq694=,tag:dAKl55lwHVGUvOmurbdU9A==,type:str]",
-			"AIFF": "ENC[AES256_GCM,data:RgO7bAoyNqsW2UE=,iv:/RpMfkLMAyJlPRCt2vMuCPOBkCU08KhixKcuPSEphAI=,tag:6fqii2b6MEMe813HMuu4Eg==,type:str]",
-			"Libation": "ENC[AES256_GCM,data:s1kLd0rg97gJn08=,iv:5khuEzeBdKbGUT1YBbHFkoRguYi3/Bu9cqQ+GqsiDxU=,tag:/FMQfxT9CMMNEYeFMZpDOw==,type:str]"
+			"AIFF": "ENC[AES256_GCM,data:RgO7bAoyNqsW2UE=,iv:/RpMfkLMAyJlPRCt2vMuCPOBkCU08KhixKcuPSEphAI=,tag:6fqii2b6MEMe813HMuu4Eg==,type:str]"
 		}
 	},
 	"sops": {
@@ -47,8 +47,8 @@
 				"enc": "-----BEGIN AGE ENCRYPTED FILE-----\nYWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBCYzZhOTk1YTlhN25LYUIw\nZC92aDZZSjVRZVl0aWpZUWFnNUxGaFRFZmxBClcvVTRadGI3WURROVIyZzRTcDZj\nYVJHNWlBSnFvVzVvUS8zRTF4cHhlc1kKLS0tIDhpNDV4WXJiQ3VubXFhZ2VJSHJQ\nSVJCVE4yV3NJUUZMQzUyNUNKam8wTGsKxPEllf7PJGHbA6h4K0+A78EQJ1v4hqVO\n74xCYhH037BruemXEsjyFmZIpi19BZEEmVlmHceogUrj5HuAU/pv6A==\n-----END AGE ENCRYPTED FILE-----\n"
 			}
 		],
-		"lastmodified": "2024-10-27T22:34:08Z",
-		"mac": "ENC[AES256_GCM,data:hpELiCMRhQAzuOuVCKTc1Q0tIIGSOl9hEX/7v+lf+klUNJouSF0f2OPU60NUH5nma8RttOQQu0xZbppLkR5fDz8DLrRe28YtfIlM+AFjqg00vYVb7Q5KvHqEBmEYZ0wO0AUrYJN2CkkBkd9U6H6fY5zN4EKx0gl+G2qr4LmZ1v4=,iv:BHlviGpeTiPwTSshFmKlO89455aI+/FBD3ZgtE6qgQU=,tag:/zwGKy+R5nkzbFvB/WoILw==,type:str]",
+		"lastmodified": "2024-10-28T12:07:31Z",
+		"mac": "ENC[AES256_GCM,data:5NVoZb5fIYW7nDJh15sv2nLy/rvh8Q7ee2Sv3pYASCe11NRPZmYX9UcaiSpgudgdULBs5FPPs4BEidExAGO3uJJcn+VZMwKonMudAkY+HqPQK/qmwUoFPnvZr0JcWCer+nhvMimLCThkUkFIv8IaTqv45SBtGpzBDIkhacFdeS0=,iv:L1DfWwOoa8t0unA+eoXBwHn3J4Bt9f18or/RN72H0oo=,tag:iQ3rZrgpwyv+GNrMt6TVBA==,type:str]",
 		"pgp": null,
 		"unencrypted_suffix": "_unencrypted",
 		"version": "3.9.1"

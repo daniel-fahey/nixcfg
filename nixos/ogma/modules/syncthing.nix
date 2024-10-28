@@ -17,6 +17,7 @@
       devices = {
         helios64.id = secrets.syncthing.devices.helios64;
         nothing1.id = secrets.syncthing.devices.nothing1;
+        laptop.id = secrets.syncthing.devices.laptop;
       };
       folders = {
         PhoneCamera2 = {
@@ -34,16 +35,6 @@
           enable = true;
           id = secrets.syncthing.folders.AIFF;
           path = "~/AIFF";
-          devices = [
-            "helios64"
-          ];
-          rescanIntervalS = 3600;
-          type = "receiveonly";
-        };
-        Libation = {
-          enable = true;
-          id = secrets.syncthing.folders.Libation;
-          path = "~/Libation";
           devices = [
             "helios64"
           ];

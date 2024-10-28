@@ -37,6 +37,7 @@
       isNormalUser = true;
       extraGroups = [
         "wheel" # Enable ‘sudo’ for the user.
+        "media"
       ];
       openssh.authorizedKeys.keys = [
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJbyBsOYlK6k6hQvpOwe9v6xC0mqpUvaR7oRUjsKU7EZ daniel@laptop"
@@ -71,6 +72,7 @@
     enable = true;
     settings = {
       PasswordAuthentication = false;
+      X11Forwarding = true;
     };
   };
 
@@ -146,6 +148,7 @@
     kitty
     git-crypt
     dig
+    libation
   ];
 
   services.btrfs.autoScrub = {
