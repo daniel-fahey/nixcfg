@@ -42,8 +42,8 @@
       PHOTOPRISM_DATABASE_NAME = "photoprism";
       PHOTOPRISM_DATABASE_SERVER = "/run/mysqld/mysqld.sock";
       PHOTOPRISM_DATABASE_USER = "photoprism";
-
-      # PHOTOPRISM_INDEX_SCHEDULE = "@every 5m";
+      PHOTOPRISM_INDEX_SCHEDULE = "*/10 * * * *"; # At every 10th minute
+      PHOTOPRISM_ORIGINALS_LIMIT = "-1";
     };
   };
 
