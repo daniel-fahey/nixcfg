@@ -4,7 +4,6 @@
   sops.secrets."nextcloud/admin_password" = {
     owner = "nextcloud";
     group = "nextcloud";
-    # restartUnits = [ "nextcloud.service" ];
   };
 
   services.nextcloud = {
@@ -16,13 +15,17 @@
     config = {
       dbtype = "pgsql";
       adminpassFile = config.sops.secrets."nextcloud/admin_password".path;
+      # Collabora configuration
+      overwriteProtocol = "https";
+      extraTrustedDomains = [
+        "office.${secrets.ogma.domain}"
+      ];
     };
+    settings.loglevel = 0;
     extraApps = {
       inherit (config.services.nextcloud.package.packages.apps)
-      memories cospend deck calendar contacts tasks notes polls spreed
-      registration # N.B. enabled
-      # recently available in pkgs.nextcloud30:
-      maps forms;
+        memories cospend deck calendar contacts tasks notes polls spreed
+        registration maps forms richdocuments;
     };
     extraAppsEnable = true;
     configureRedis = true;
@@ -32,6 +35,4 @@
     forceSSL = true;
     useACMEHost = secrets.ogma.domain;
   };
-  
-
 }

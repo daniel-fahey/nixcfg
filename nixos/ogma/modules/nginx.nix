@@ -12,6 +12,7 @@
         "autoconfig.${secrets.ogma.domain}"
         "autodiscover.${secrets.ogma.domain}"
         "cloud.${secrets.ogma.domain}"
+        "office.${secrets.ogma.domain}"
       ];
       group = config.services.nginx.group;
       reloadServices = [ "nginx" "stalwart-mail" ];

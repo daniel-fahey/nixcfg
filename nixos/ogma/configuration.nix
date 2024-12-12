@@ -20,6 +20,7 @@
     ./modules/stalwart.nix
     ./modules/refused-connections.nix
     ./modules/nextcloud.nix
+    ./modules/collabora-online.nix
     ./modules/audiobookshelf.nix
     # ./modules/transmission.nix
   ];
