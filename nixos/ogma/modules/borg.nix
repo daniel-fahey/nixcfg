@@ -13,6 +13,7 @@
     paths = [
       "/var/backup/vaultwarden"
       "/var/lib/xandikos/user"
+      "/persist"
     ];
     repo = "ssh://${secrets.ogma.borgbase}@${secrets.ogma.borgbase}.repo.borgbase.com/./repo";
     environment = {
