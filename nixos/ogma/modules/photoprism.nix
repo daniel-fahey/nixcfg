@@ -63,6 +63,9 @@
     virtualHosts."photos.${secrets.ogma.additional_domain}" = {
       forceSSL = true;
       enableACME = true;
+      listenAddresses = [
+        "${secrets.ogma.additional_ipv4_address}"
+      ];
       locations."/" = {
         proxyPass = "http://[::1]:2342";
         proxyWebsockets = true;

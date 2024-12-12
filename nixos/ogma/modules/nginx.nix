@@ -5,7 +5,7 @@
     defaults.email = secrets.acme.email;
     # defaults.server = "https://acme-staging-v02.api.letsencrypt.org/directory"; # Staging
     certs."${secrets.ogma.domain}" = {
-      extraDomainNames = [ 
+      extraDomainNames = [
         "mx1.${secrets.ogma.domain}"
         "mail.${secrets.ogma.domain}"
         "mta-sts.${secrets.ogma.domain}"
@@ -15,7 +15,10 @@
         "office.${secrets.ogma.domain}"
       ];
       group = config.services.nginx.group;
-      reloadServices = [ "nginx" "stalwart-mail" ];
+      reloadServices = [
+        "nginx"
+        "stalwart-mail"
+      ];
       webroot = "/var/lib/acme/acme-challenge";
     };
   };
@@ -24,6 +27,10 @@
     enable = true;
     recommendedProxySettings = true;
     recommendedTlsSettings = true;
+    defaultListenAddresses = [
+      "${secrets.ogma.ipv4_address}"
+      "[${secrets.ogma.ipv6_address}]"
+    ];
   };
 
   networking.firewall.allowedTCPPorts = [
