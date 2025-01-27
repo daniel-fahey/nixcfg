@@ -151,6 +151,7 @@
     git-crypt
     dig
     libation
+    lynis
   ];
 
   services.btrfs.autoScrub = {

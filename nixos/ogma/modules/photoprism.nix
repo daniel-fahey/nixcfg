@@ -50,6 +50,9 @@
   services.mysql = {
     enable = true;
     package = pkgs.mariadb;
+    settings.mysqld = {
+      bind-address = "localhost";
+    };
     ensureDatabases = [ "photoprism" ];
     ensureUsers = [ {
       name = "photoprism";

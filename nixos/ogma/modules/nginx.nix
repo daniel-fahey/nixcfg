@@ -27,10 +27,26 @@
     enable = true;
     recommendedProxySettings = true;
     recommendedTlsSettings = true;
-    defaultListenAddresses = [
-      "${secrets.ogma.ipv4_address}"
-      "[${secrets.ogma.ipv6_address}]"
-    ];
+
+    # Default server to handle direct IP access and unknown subdomains
+    virtualHosts."_" = {
+      default = true;
+      # Add specific IP addresses to catch-all server
+      listen = [
+        # Main IP
+        { addr = secrets.ogma.ipv4_address; port = 80; }
+        { addr = secrets.ogma.ipv4_address; port = 443; }
+        { addr = "[${secrets.ogma.ipv6_address}]"; port = 80; }
+        { addr = "[${secrets.ogma.ipv6_address}]"; port = 443; }
+        # Secondary IP
+        { addr = secrets.ogma.additional_ipv4_address; port = 80; }
+        { addr = secrets.ogma.additional_ipv4_address; port = 443; }
+      ];
+      rejectSSL = true;
+      extraConfig = ''
+        return 444;
+      '';
+    };
   };
 
   networking.firewall.allowedTCPPorts = [

@@ -79,6 +79,9 @@ in
       "webadmin.${domain}" = {
         forceSSL = true;
         useACMEHost = "${domain}";
+        listenAddresses = [
+          "${secrets.ogma.ipv4_address}"
+        ];
         serverAliases = [
           "mx1.${domain}"
           "mail.${domain}"

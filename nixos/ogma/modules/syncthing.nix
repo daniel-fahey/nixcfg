@@ -12,6 +12,7 @@
       options = {
         globalAnnounceEnabled = true;
         relaysEnabled = true;
+        localAnnounceEnabled = false;
         urAccepted = -1; # Disable usage reporting
       };
       devices = {

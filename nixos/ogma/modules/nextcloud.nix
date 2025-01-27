@@ -34,5 +34,8 @@
   services.nginx.virtualHosts."${config.services.nextcloud.hostName}" = {
     forceSSL = true;
     useACMEHost = secrets.ogma.domain;
+    listenAddresses = [
+      "${secrets.ogma.ipv4_address}"
+    ];
   };
 }
