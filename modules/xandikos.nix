@@ -27,7 +27,6 @@
   sops.secrets.dav_htpasswd = {
     owner = "nginx";
     group = "nginx";
-    sopsFile = ../secrets.yaml;
     restartUnits = [ "nginx.service" ];
   };
 

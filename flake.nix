@@ -16,26 +16,62 @@
     };
   };
 
-  outputs = { self, nixpkgs, disko, sops-nix, age-key, ... }:
-  let
-    secrets = builtins.fromJSON (builtins.readFile (
-      nixpkgs.legacyPackages.x86_64-linux.runCommand "decrypt-privates" {
-        nativeBuildInputs = [ nixpkgs.legacyPackages.x86_64-linux.sops ];
-      } ''
-        export SOPS_AGE_KEY="$(cat ${age-key.outPath})"
-        sops -d ${self}/privates.json > $out
-      ''
-    ));
-  in
-  {
-    nixosConfigurations.ogma = nixpkgs.lib.nixosSystem {
-      system = "x86_64-linux";
-      specialArgs = { inherit secrets; };
-      modules = [
-        ./nixos/ogma/configuration.nix
-        disko.nixosModules.disko
-        sops-nix.nixosModules.sops
-      ];
+  outputs =
+    {
+      self,
+      nixpkgs,
+      disko,
+      sops-nix,
+      age-key,
+      ...
+    }:
+    let
+      secrets = builtins.fromJSON (
+        builtins.readFile (
+          nixpkgs.legacyPackages.x86_64-linux.runCommand "decrypt-privates"
+            {
+              nativeBuildInputs = [ nixpkgs.legacyPackages.x86_64-linux.sops ];
+            }
+            ''
+              export SOPS_AGE_KEY="$(cat ${age-key.outPath})"
+              sops -d ${self}/privates.json > $out
+            ''
+        )
+      );
+    in
+    {
+      nixosConfigurations = {
+        ogma = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          specialArgs = { inherit secrets; };
+          modules = [
+            ./hosts/ogma/configuration.nix
+            ./hosts/ogma/hardware-configuration.nix
+            ./hosts/ogma/disk-config.nix
+            ./modules/borg.nix
+            ./modules/nginx.nix
+            ./modules/vaultwarden.nix
+            ./modules/xandikos.nix
+            ./modules/yggdrasil.nix
+            ./modules/photoprism.nix
+            ./modules/syncthing.nix
+            ./modules/nextcloud.nix
+            ./modules/collabora-online.nix
+            ./modules/audiobookshelf.nix
+            ./modules/refused-connections.nix
+            ./modules/stalwart.nix
+            disko.nixosModules.disko
+            sops-nix.nixosModules.sops
+          ];
+        };
+        badb = nixpkgs.lib.nixosSystem {
+          system = "aarch64-linux";
+          modules = [
+            ./hosts/badb/configuration.nix
+            disko.nixosModules.disko
+            sops-nix.nixosModules.sops
+          ];
+        };
+      };
     };
-  };
 }

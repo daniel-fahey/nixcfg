@@ -6,25 +6,6 @@
 }:
 
 {
-  imports = [
-    ./hardware-configuration.nix
-    ./disk-config.nix
-    ./modules/borg.nix
-    ./modules/nginx.nix
-    ./modules/vaultwarden.nix
-    ./modules/xandikos.nix
-    ./modules/yggdrasil.nix
-    ./modules/photoprism.nix
-    ./modules/syncthing.nix
-    # ./modules/davis.nix
-    ./modules/stalwart.nix
-    ./modules/refused-connections.nix
-    ./modules/nextcloud.nix
-    ./modules/collabora-online.nix
-    ./modules/audiobookshelf.nix
-    # ./modules/transmission.nix
-  ];
-
   # This will add secrets.yaml to the nix store
   sops.defaultSopsFile = ./secrets.yaml;
 

@@ -7,8 +7,6 @@
   };
 
   sops.secrets."yggdrasil.hjson" = {
-    format = "binary";
-    sopsFile = ../yggdrasil.hjson;
     restartUnits = [ "yggdrasil.service" ];
   };
 

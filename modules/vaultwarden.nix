@@ -27,10 +27,8 @@
   };
 
   sops.secrets."vaultwarden.env" = {
-    format = "dotenv";
     owner = "vaultwarden";
     group = "vaultwarden";
-    sopsFile = ../vaultwarden.env;
     restartUnits = [ "vaultwarden.service" ];
   };
 
