@@ -48,6 +48,7 @@
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
   boot.loader.systemd-boot.enable = true;
+  boot.loader.systemd-boot.consoleMode = "1";
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.efi.efiSysMountPoint = "/efi";
 
@@ -170,7 +171,10 @@
 
   boot.initrd.availableKernelModules = [ "igb" ];
 
-  boot.kernelParams = [ "ip=dhcp" ];
+  boot.kernelParams = [
+    "ip=dhcp"
+    "console=ttyS0,115200n8"
+  ];
 
   zramSwap = {
     enable = true;
