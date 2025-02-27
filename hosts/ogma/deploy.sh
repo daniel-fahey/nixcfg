@@ -1,11 +1,14 @@
-#!/usr/bin/env bash
+#! /usr/bin/env nix-shell
+#! nix-shell -i bash -p sops yq-go
+set -euo pipefail
 
-# May need to install rsync if using standard NixOS ISO
-# ssh root@$(sops -d secrets.yaml | yq -r .ipv4) "nix-env -iA nixos.rsync"
+[ $# -eq 1 ] || { echo "Usage: $0 DIRECTORY" >&2; exit 1; }
 
-# Install NixOS to the host system with our secrets
+ip=$(sops -d "$1/secrets.yaml" | yq -r .ipv4)
+# key=$(sops -d "$1/secrets.yaml" | yq -r .cryptroot)
+# --disk-encryption-keys /tmp/disk.key <(echo "$key") \
+
 nix run github:nix-community/nixos-anywhere -- \
---extra-files extra-files \
---disk-encryption-keys /tmp/disk.key <(sops -d secrets.yaml | yq -r .cryptroot) \
+--extra-files "$1/extra-files" \
 --build-on-remote \
---flake .#ogma root@$(sops -d secrets.yaml | yq -r .ipv4)
+--flake ".#$1" "root@$ip"

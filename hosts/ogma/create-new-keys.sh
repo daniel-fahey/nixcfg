@@ -1,19 +1,19 @@
-#!/usr/bin/env bash
+#! /usr/bin/env nix-shell
+#! nix-shell -i bash -p openssh coreutils ssh-to-age
+set -euo pipefail
 
-initrd_secrets=extra-files/etc/secrets/initrd
-host_keys=extra-files/etc/ssh
+[ $# -eq 1 ] || { echo "Usage: $0 DIRECTORY" >&2; exit 1; }
 
-# create directory for initrd secrets
-install -d -m755 $initrd_secrets
+dir="$1/extra-files"
+initrd="$dir/etc/secrets/initrd"
+host="$dir/etc/ssh"
 
-# create directory for host keys
-install -d -m755 $host_keys
+install -d -m700 "$initrd" "$host"
 
-# generate initrd keys
-ssh-keygen -t ed25519 -N "" -f $initrd_secrets/ssh_host_ed25519_key -C "initrd"
+[ ! -f "$initrd/ssh_host_ed25519_key" ] && 
+    ssh-keygen -t ed25519 -N "" -f "$initrd/ssh_host_ed25519_key" -C "initrd"
 
-# generate host keys
-ssh-keygen -t ed25519 -N "" -f $host_keys/ssh_host_ed25519_key -C "host"
+[ ! -f "$host/ssh_host_ed25519_key" ] && 
+    ssh-keygen -t ed25519 -N "" -f "$host/ssh_host_ed25519_key" -C "host"
 
-# get age public key
-nix-shell -p ssh-to-age --run 'cat etc/ssh/ssh_host_ed25519_key.pub | ssh-to-age'
+ssh-to-age < "$host/ssh_host_ed25519_key.pub"
