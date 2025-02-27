@@ -1,4 +1,4 @@
-{ secrets, ... }:
+{ facts, ... }:
 
 {
   services.audiobookshelf = {
@@ -10,11 +10,11 @@
 
   services.nginx = {
     # https://github.com/advplyr/audiobookshelf?tab=readme-ov-file#nginx-reverse-proxy
-    virtualHosts."abs.${secrets.ogma.additional_domain}" = {
+    virtualHosts."abs.${facts.ogma.additional_domain}" = {
       forceSSL = true;
       enableACME = true;
       listenAddresses = [
-        "${secrets.ogma.additional_ipv4_address}"
+        "${facts.ogma.additional_ipv4_address}"
       ];
       locations."/" = {
         proxyPass = "http://[::1]:8000";

@@ -1,4 +1,4 @@
-{ config, pkgs, secrets, ... }:
+{ config, pkgs, facts, ... }:
 
 {
   services.collabora-online = {
@@ -15,16 +15,20 @@
 
       storage.wopi = {
         "@allow" = true;
-        host = [ "cloud.${secrets.ogma.domain}" ];
+        host = [ "cloud.${facts.ogma.domain}" ];
       };
     };
   };
 
-  services.nginx.virtualHosts."office.${secrets.ogma.domain}" = let
+  services.nginx.virtualHosts."office.${facts.ogma.domain}" = let
     proxyPass = "http://[::1]:${toString config.services.collabora-online.port}";
   in {
     forceSSL = true;
-    useACMEHost = secrets.ogma.domain;
+    enableACME = true;
+    listenAddresses = [
+      "${facts.ogma.ipv4_address}"
+      "[${facts.ogma.ipv6_address}]"
+    ];
 
     locations = {
       "^~ /browser" = {

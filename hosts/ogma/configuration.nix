@@ -1,7 +1,7 @@
 {
   config,
   pkgs,
-  secrets,
+  facts,
   ...
 }:
 
@@ -70,21 +70,21 @@
       eno1 = {
         ipv4.addresses = [
           {
-            address = secrets.ogma.ipv4_address;
+            address = facts.ogma.ipv4_address;
             prefixLength = 24;
           }
           {
-            address = secrets.ogma.additional_ipv4_address;
+            address = facts.ogma.additional_ipv4_address;
             prefixLength = 24;
           }
         ];
         ipv6.addresses = [
           {
-            address = secrets.ogma.ipv6_address;
+            address = facts.ogma.ipv6_address;
             prefixLength = 64;
           }
           {
-            address = "${secrets.ogma.ipv6_address}1";
+            address = "${facts.ogma.ipv6_address}1";
             prefixLength = 128;
           }
         ];
@@ -92,11 +92,11 @@
       eno2.useDHCP = false;
     };
     defaultGateway = {
-      address = secrets.ogma.ipv4_gateway;
+      address = facts.ogma.ipv4_gateway;
       interface = "eno1";
     };
     defaultGateway6 = {
-      address = secrets.ogma.ipv6_gateway;
+      address = facts.ogma.ipv6_gateway;
       interface = "eno1";
     };
   };

@@ -1,4 +1,4 @@
-{ config, secrets, ... }:
+{ config, facts, ... }:
 {
 
   services.vaultwarden = {
@@ -7,18 +7,18 @@
     config = {
       ROCKET_ADDRESS = "::1";
       ROCKET_PORT = 8222;
-      DOMAIN = "https://vault.${secrets.ogma.additional_domain}";
+      DOMAIN = "https://vault.${facts.ogma.additional_domain}";
       SIGNUPS_ALLOWED = false;
     };
     backupDir = "/var/backup/vaultwarden";
   };
 
   services.nginx = {
-    virtualHosts."vault.${secrets.ogma.additional_domain}" = {
+    virtualHosts."vault.${facts.ogma.additional_domain}" = {
       forceSSL = true;
       enableACME = true;
       listenAddresses = [
-        "${secrets.ogma.additional_ipv4_address}"
+        "${facts.ogma.additional_ipv4_address}"
       ];
       locations."/" = {
         proxyPass = "http://[::1]:8222";

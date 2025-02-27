@@ -1,13 +1,13 @@
-{ secrets, ... }:
+{ facts, ... }:
 
 {
   services.syncthing = {
     enable = true;
-    guiAddress = "[${secrets.ogma.yggdrasil_ipv6}]:8384";
+    guiAddress = "[${facts.ogma.yggdrasil_ipv6}]:8384";
     settings = {
       gui = {
         user = "admin";
-        password = secrets.ogma.syncthing_gui_password;
+        password = facts.ogma.syncthing_gui_password;
       };
       options = {
         globalAnnounceEnabled = true;
@@ -16,14 +16,14 @@
         urAccepted = -1; # Disable usage reporting
       };
       devices = {
-        helios64.id = secrets.syncthing.devices.helios64;
-        nothing1.id = secrets.syncthing.devices.nothing1;
-        laptop.id = secrets.syncthing.devices.laptop;
+        helios64.id = facts.syncthing.devices.helios64;
+        nothing1.id = facts.syncthing.devices.nothing1;
+        laptop.id = facts.syncthing.devices.laptop;
       };
       folders = {
         PhoneCamera2 = {
           enable = true;
-          id = secrets.syncthing.folders.PhoneCamera2;
+          id = facts.syncthing.folders.PhoneCamera2;
           path = "/persist/media/photoprism/originals/PhoneCamera2";
           devices = [
             "nothing1"
@@ -34,7 +34,7 @@
         };
         AIFF = {
           enable = true;
-          id = secrets.syncthing.folders.AIFF;
+          id = facts.syncthing.folders.AIFF;
           path = "~/AIFF";
           devices = [
             "helios64"

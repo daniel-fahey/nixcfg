@@ -1,4 +1,4 @@
-{ config, secrets, pkgs, ... }:
+{ config, facts, pkgs, ... }:
 
 {
   sops.secrets."photoprism/admin_password" = {
@@ -36,7 +36,7 @@
     settings = {
       PHOTOPRISM_ADMIN_USER = "admin";
       PHOTOPRISM_DEFAULT_LOCALE = "en";
-      PHOTOPRISM_SITE_URL = "https://photos.${secrets.ogma.additional_domain}";
+      PHOTOPRISM_SITE_URL = "https://photos.${facts.ogma.additional_domain}";
       PHOTOPRISM_DISABLE_TLS = "true";
       PHOTOPRISM_DATABASE_DRIVER = "mysql";
       PHOTOPRISM_DATABASE_NAME = "photoprism";
@@ -63,11 +63,11 @@
   };
 
   services.nginx = {
-    virtualHosts."photos.${secrets.ogma.additional_domain}" = {
+    virtualHosts."photos.${facts.ogma.additional_domain}" = {
       forceSSL = true;
       enableACME = true;
       listenAddresses = [
-        "${secrets.ogma.additional_ipv4_address}"
+        "${facts.ogma.additional_ipv4_address}"
       ];
       locations."/" = {
         proxyPass = "http://[::1]:2342";

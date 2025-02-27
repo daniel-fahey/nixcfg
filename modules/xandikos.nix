@@ -1,4 +1,4 @@
-{ config, secrets, ... }:
+{ config, facts, ... }:
 {
 
   services.xandikos = {
@@ -9,17 +9,17 @@
     ];
     nginx = {
       enable = true;
-      hostName = "dav.${secrets.ogma.additional_domain}";
+      hostName = "dav.${facts.ogma.additional_domain}";
     };
   };
 
   services.nginx = {
-    virtualHosts."dav.${secrets.ogma.additional_domain}" = {
+    virtualHosts."dav.${facts.ogma.additional_domain}" = {
       forceSSL = true;
       enableACME = true;
       basicAuthFile = config.sops.secrets.dav_htpasswd.path;
       listenAddresses = [
-        "${secrets.ogma.additional_ipv4_address}"
+        "${facts.ogma.additional_ipv4_address}"
       ];
     };
   };

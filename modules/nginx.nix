@@ -1,26 +1,9 @@
-{ secrets, config, ... }:
+{ facts, config, ... }:
 {
   security.acme = {
     acceptTerms = true;
-    defaults.email = secrets.acme.email;
+    defaults.email = facts.acme.email;
     # defaults.server = "https://acme-staging-v02.api.letsencrypt.org/directory"; # Staging
-    certs."${secrets.ogma.domain}" = {
-      extraDomainNames = [
-        "mx1.${secrets.ogma.domain}"
-        "mail.${secrets.ogma.domain}"
-        "mta-sts.${secrets.ogma.domain}"
-        "autoconfig.${secrets.ogma.domain}"
-        "autodiscover.${secrets.ogma.domain}"
-        "cloud.${secrets.ogma.domain}"
-        "office.${secrets.ogma.domain}"
-      ];
-      group = config.services.nginx.group;
-      reloadServices = [
-        "nginx"
-        "stalwart-mail"
-      ];
-      webroot = "/var/lib/acme/acme-challenge";
-    };
   };
 
   services.nginx = {
@@ -28,29 +11,31 @@
     recommendedProxySettings = true;
     recommendedTlsSettings = true;
 
-    # Default server to handle direct IP access and unknown subdomains
+    # Default server to handle ACME challenges and reject unknown hosts
     virtualHosts."_" = {
       default = true;
-      # Add specific IP addresses to catch-all server
       listen = [
-        # Main IP
-        { addr = secrets.ogma.ipv4_address; port = 80; }
-        { addr = secrets.ogma.ipv4_address; port = 443; }
-        { addr = "[${secrets.ogma.ipv6_address}]"; port = 80; }
-        { addr = "[${secrets.ogma.ipv6_address}]"; port = 443; }
-        # Secondary IP
-        { addr = secrets.ogma.additional_ipv4_address; port = 80; }
-        { addr = secrets.ogma.additional_ipv4_address; port = 443; }
+        { addr = "0.0.0.0"; port = 80; }
+        { addr = "[::]"; port = 80; }
+        { addr = "0.0.0.0"; port = 443; ssl = true; }
+        { addr = "[::]"; port = 443; ssl = true; }
       ];
+      
+      # Handle ACME challenges
+      locations."/.well-known/acme-challenge" = {
+        root = "/var/lib/acme/acme-challenge";
+      };
+
+      # Reject everything else
+      locations."/" = {
+        extraConfig = ''
+          return 444;
+        '';
+      };
+      
       rejectSSL = true;
-      extraConfig = ''
-        return 444;
-      '';
     };
   };
 
-  networking.firewall.allowedTCPPorts = [
-    80
-    443
-  ];
+  networking.firewall.allowedTCPPorts = [ 80 443 ];
 }

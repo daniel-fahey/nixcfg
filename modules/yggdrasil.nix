@@ -1,4 +1,4 @@
-{ config, secrets, ... }:
+{ config, facts, ... }:
 {
 
   services.yggdrasil = {
@@ -11,7 +11,7 @@
   };
 
   networking.firewall.allowedTCPPorts = [
-    secrets.ogma.yggdrasil_listen_port
+    facts.ogma.yggdrasil_listen_port
   ];
 
 }

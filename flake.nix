@@ -26,15 +26,15 @@
       ...
     }:
     let
-      secrets = builtins.fromJSON (
+      facts = builtins.fromJSON (
         builtins.readFile (
-          nixpkgs.legacyPackages.x86_64-linux.runCommand "decrypt-privates"
+          nixpkgs.legacyPackages.x86_64-linux.runCommand "decrypt-facts"
             {
               nativeBuildInputs = [ nixpkgs.legacyPackages.x86_64-linux.sops ];
             }
             ''
               export SOPS_AGE_KEY="$(cat ${age-key.outPath})"
-              sops -d ${self}/privates.json > $out
+              sops -d ${self}/facts.json > $out
             ''
         )
       );
@@ -43,7 +43,7 @@
       nixosConfigurations = {
         ogma = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
-          specialArgs = { inherit secrets; };
+          specialArgs = { inherit facts; };
           modules = [
             ./hosts/ogma/configuration.nix
             ./hosts/ogma/hardware-configuration.nix
@@ -59,14 +59,16 @@
             ./modules/collabora-online.nix
             ./modules/audiobookshelf.nix
             ./modules/refused-connections.nix
-            ./modules/stalwart.nix
             disko.nixosModules.disko
             sops-nix.nixosModules.sops
           ];
         };
         badb = nixpkgs.lib.nixosSystem {
           system = "aarch64-linux";
+          specialArgs = { inherit facts; };
           modules = [
+            ./modules/stalwart.nix
+            ./modules/web-key-directory
             ./hosts/badb/configuration.nix
             disko.nixosModules.disko
             sops-nix.nixosModules.sops
