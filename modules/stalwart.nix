@@ -1,108 +1,105 @@
-{ config, pkgs, secrets, ... }:
+{ config, lib, pkgs, ... }:
 
 let
-  stalwartSecrets = [
-    "admin-secret"
-  ];
-  domain = secrets.ogma.domain;
-  ipv4 = secrets.ogma.ipv4_address;
-  ipv6 = secrets.ogma.ipv6_address;
-  
-in
-{
-  sops.secrets = builtins.listToAttrs (map (name: {
-    name = "stalwart/${name}";
-    value = {
+  cfg = config.services.stalwart;
+in {
+  options.services.stalwart = {
+    enable = lib.mkEnableOption "Stalwart mail server";
+    
+    domain = lib.mkOption {
+      type = lib.types.str;
+      description = "Domain name for the mail server";
+    };
+
+    ipv4 = lib.mkOption {
+      type = lib.types.str;
+      description = "IPv4 address to bind services to";
+    };
+
+    ipv6 = lib.mkOption {
+      type = lib.types.str;
+      description = "IPv6 address to bind services to";
+    };
+  };
+
+  config = lib.mkIf cfg.enable {
+    sops.secrets."stalwart/admin-secret" = {
       owner = "stalwart-mail";
       group = "stalwart-mail";
       restartUnits = [ "stalwart-mail.service" ];
     };
-  }) stalwartSecrets);
 
-  services.stalwart-mail = {
-    enable = true;
-    package = pkgs.stalwart-mail;
-    openFirewall = false;
-    settings = {
-      queue.outbound.tls.mta-sts = "optional";
-      session.mta-sts = {
-        mode = "testing";
-        max-age = "7d";
-        mx = [ "mx1.${domain}" ];
-      };
-      server = {
-        hostname = "mx1.${domain}";
-        tls = {
-          enable = true;
+    services.stalwart-mail = {
+      enable = true;
+      package = pkgs.stalwart-mail;
+      openFirewall = false;
+      settings = {
+        queue.outbound.tls.mta-sts = "optional";
+        session.mta-sts = {
+          mode = "testing";
+          max-age = "7d";
+          mx = [ "mail.${cfg.domain}" ];
         };
-        listener = {
-          smtp = {
-            bind = [ "${ipv4}:25" "[${ipv6}1]:25" ];
-            protocol = "smtp";
-          };
-          submissions = {
-            bind = [ "${ipv4}:465" "[${ipv6}1]:465" ];
-            protocol = "smtp";
-            tls.implicit = true;
-          };
-          imaps = {
-            bind = [ "${ipv4}:993" "[${ipv6}1]:993" ];
-            protocol = "imap";
-            tls.implicit = true;
-          };
-          https = {
-            bind = "[::1]:18080";
-            # bind = [ "${ipv4}:443" "[${ipv6}1]:443" ];
-            protocol = "http";
-            # tls.implicit = true;
+        server = {
+          hostname = "mail.${cfg.domain}";
+          tls.enable = true;
+          listener = {
+            smtp = {
+              bind = [ "${cfg.ipv4}:25" "[${cfg.ipv6}1]:25" ];
+              protocol = "smtp";
+            };
+            submissions = {
+              bind = [ "${cfg.ipv4}:465" "[${cfg.ipv6}1]:465" ];
+              protocol = "smtp";
+              tls.implicit = true;
+            };
+            imaps = {
+              bind = [ "${cfg.ipv4}:993" "[${cfg.ipv6}1]:993" ];
+              protocol = "imap";
+              tls.implicit = true;
+            };
+            https = {
+              bind = "[::1]:18080";
+              protocol = "http";
+            };
           };
         };
-      };
-      lookup.default = {
-        hostname = "mx1.${domain}";
-        domain = domain;
-      };
-      authentication.fallback-admin = {
-        user = "admin";
-        secret = "%{file:${config.sops.secrets."stalwart/admin-secret".path}}%";
-      };
-      certificate."default" = {
-        cert = "%{file:/var/lib/acme/${domain}/fullchain.pem}%";
-        private-key = "%{file:/var/lib/acme/${domain}/key.pem}%";
-        default = true;
-      };
-    };
-  };
-
-  services.nginx = {
-    virtualHosts = {
-      "webadmin.${domain}" = {
-        forceSSL = true;
-        useACMEHost = "${domain}";
-        listenAddresses = [
-          "${secrets.ogma.ipv4_address}"
-        ];
-        serverAliases = [
-          "mx1.${domain}"
-          "mail.${domain}"
-          "mta-sts.${domain}"
-          "autoconfig.${domain}"
-          "autodiscover.${domain}"
-        ];
-        locations."/" = {
-          proxyPass = "http://[::1]:18080";
-          proxyWebsockets = true;
+        lookup.default = {
+          hostname = "mail.${cfg.domain}";
+          domain = cfg.domain;
+        };
+        authentication.fallback-admin = {
+          user = "admin";
+          secret = "%{file:${config.sops.secrets."stalwart/admin-secret".path}}%";
+        };
+        certificate."default" = {
+          cert = "%{file:/var/lib/acme/mail.${cfg.domain}/fullchain.pem}%";
+          private-key = "%{file:/var/lib/acme/mail.${cfg.domain}/key.pem}%";
+          default = true;
         };
       };
     };
+
+    services.nginx = {
+      virtualHosts = {
+        "mail.${cfg.domain}" = {
+          forceSSL = true;
+          enableACME = true;
+          listenAddresses = [ cfg.ipv4 ];
+          serverAliases = [
+            "mta-sts.${cfg.domain}"
+            "autoconfig.${cfg.domain}" 
+            "autodiscover.${cfg.domain}"
+          ];
+          locations."/" = {
+            proxyPass = "http://[::1]:18080";
+            proxyWebsockets = true;
+          };
+        };
+        };
+      };
+
+    networking.firewall.allowedTCPPorts = [ 25 465 993 ];
+    users.users.stalwart-mail.extraGroups = [ config.services.nginx.group ];
   };
-
-  networking.firewall.allowedTCPPorts = [
-    25   # For SMTP
-    465  # For SMTPS
-    993  # For IMAPS
-  ];
-
-  # Ensure Stalwart can read the ACME certificates
-  users.users.stalwart-mail.extraGroups = [ config.services.nginx.group ];
 }
