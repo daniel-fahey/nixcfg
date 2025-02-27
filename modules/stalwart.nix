@@ -45,16 +45,16 @@ in {
           tls.enable = true;
           listener = {
             smtp = {
-              bind = [ "${cfg.ipv4}:25" "[${cfg.ipv6}1]:25" ];
+              bind = [ "${cfg.ipv4}:25" "[${cfg.ipv6}]:25" ];
               protocol = "smtp";
             };
             submissions = {
-              bind = [ "${cfg.ipv4}:465" "[${cfg.ipv6}1]:465" ];
+              bind = [ "${cfg.ipv4}:465" "[${cfg.ipv6}]:465" ];
               protocol = "smtp";
               tls.implicit = true;
             };
             imaps = {
-              bind = [ "${cfg.ipv4}:993" "[${cfg.ipv6}1]:993" ];
+              bind = [ "${cfg.ipv4}:993" "[${cfg.ipv6}]:993" ];
               protocol = "imap";
               tls.implicit = true;
             };
@@ -85,7 +85,7 @@ in {
         "mail.${cfg.domain}" = {
           forceSSL = true;
           enableACME = true;
-          listenAddresses = [ cfg.ipv4 ];
+          listenAddresses = [ cfg.ipv4 "[${cfg.ipv6}]" ];
           serverAliases = [
             "mta-sts.${cfg.domain}"
             "autoconfig.${cfg.domain}" 
