@@ -81,7 +81,7 @@
           specialArgs = { facts = facts."aarch64-linux"; };
           modules = [
             ./modules/stalwart.nix
-            ./modules/web-key-directory
+            ./modules/web-key-directory.nix
             ./hosts/badb/configuration.nix
             disko.nixosModules.disko
             sops-nix.nixosModules.sops
