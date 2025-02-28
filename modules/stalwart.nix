@@ -35,16 +35,16 @@ in {
           tls.enable = true;
           listener = {
             smtp = {
-              bind = [ "0.0.0.0:25" "[::]:25" ];
+              bind = [ "[::]:25" ];
               protocol = "smtp";
             };
             submissions = {
-              bind = [ "0.0.0.0:465" "[::]:465" ];
+              bind = [ "[::]:465" ];
               protocol = "smtp";
               tls.implicit = true;
             };
             imaps = {
-              bind = [ "0.0.0.0:993" "[::]:993" ];
+              bind = [ "[::]:993" ];
               protocol = "imap";
               tls.implicit = true;
             };
