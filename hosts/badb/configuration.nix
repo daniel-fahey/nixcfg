@@ -184,7 +184,7 @@
   ];
 
   services.authentik = {
-    enable = true;
+    enable = false;
     environmentFile = config.sops.secrets."authentik/.env".path;
     
     settings = {
