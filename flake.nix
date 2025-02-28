@@ -31,16 +31,24 @@
       ...
     }:
     let
-      facts = builtins.fromJSON (
-        builtins.readFile (
-          nixpkgs.legacyPackages.x86_64-linux.runCommand "decrypt-facts"
-            {
-              nativeBuildInputs = [ nixpkgs.legacyPackages.x86_64-linux.sops ];
-            }
-            ''
-              export SOPS_AGE_KEY="$(cat ${age-key.outPath})"
-              sops -d ${self}/facts.json > $out
-            ''
+      forAllSystems = nixpkgs.lib.genAttrs [ "x86_64-linux" "aarch64-linux" ];
+      
+      # Generate pkgs for each system
+      pkgsFor = forAllSystems (system: import nixpkgs { inherit system; });
+      
+      # Generate facts for each system
+      facts = forAllSystems (system: 
+        builtins.fromJSON (
+          builtins.readFile (
+            pkgsFor.${system}.runCommand "decrypt-facts"
+              {
+                nativeBuildInputs = [ pkgsFor.${system}.sops ];
+              }
+              ''
+                export SOPS_AGE_KEY="$(cat ${age-key.outPath})"
+                sops -d ${self}/facts.json > $out
+              ''
+          )
         )
       );
     in
@@ -48,7 +56,7 @@
       nixosConfigurations = {
         ogma = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
-          specialArgs = { inherit facts; };
+          specialArgs = { facts = facts."x86_64-linux"; };
           modules = [
             ./hosts/ogma/configuration.nix
             ./hosts/ogma/hardware-configuration.nix
@@ -70,7 +78,7 @@
         };
         badb = nixpkgs.lib.nixosSystem {
           system = "aarch64-linux";
-          specialArgs = { inherit facts; };
+          specialArgs = { facts = facts."aarch64-linux"; };
           modules = [
             ./modules/stalwart.nix
             ./modules/web-key-directory
