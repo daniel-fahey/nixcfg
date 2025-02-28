@@ -14,6 +14,10 @@
       url = "file+file:///dev/null";
       flake = false;
     };
+    authentik-nix = {
+      url = "github:nix-community/authentik-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -23,6 +27,7 @@
       disko,
       sops-nix,
       age-key,
+      authentik-nix,
       ...
     }:
     let
@@ -72,6 +77,7 @@
             ./hosts/badb/configuration.nix
             disko.nixosModules.disko
             sops-nix.nixosModules.sops
+            authentik-nix.nixosModules.default
           ];
         };
       };

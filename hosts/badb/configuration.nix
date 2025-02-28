@@ -77,14 +77,6 @@
     ipv6 = "${facts.badb.ipv6_address}1";
   };
 
-  sops.secrets = {
-    "gpg_keys/info.asc" = {
-      owner = "wkd-generator";
-      group = "wkd-generator";
-    };
-    daniel_hpw.neededForUsers = true;
-  };
-
   services.web-key-directory = {
     enable = true;
     domain = facts.badb.domain;
@@ -139,6 +131,15 @@
     age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
   };
 
+  sops.secrets = {
+    daniel_hpw.neededForUsers = true;
+    "gpg_keys/info.asc" = {
+      owner = "wkd-generator";
+      group = "wkd-generator";
+    };
+    "authentik/.env" = {};
+  };
+
   # System Packages
   environment.systemPackages = with pkgs; [
     # System utilities
@@ -177,4 +178,27 @@
     kitty
     unibilium
   ];
+
+  services.authentik = {
+    enable = true;
+    environmentFile = config.sops.secrets."authentik/.env".path;
+    
+    settings = {
+      disable_startup_analytics = true;
+      avatars = "initials";
+      email = {
+        host = "mail.${facts.badb.domain}";
+        port = 587;
+        username = "authentik@${facts.badb.domain}";
+        use_tls = true;
+        from = "authentik@${facts.badb.domain}";
+      };
+    };
+    
+    nginx = {
+      enable = true;
+      enableACME = true;
+      host = "auth.${facts.badb.domain}";
+    };
+  };
 }
