@@ -77,16 +77,12 @@
   services.stalwart = {
     enable = true;
     domain = facts.badb.domain;
-    ipv4 = facts.badb.ipv4_address;
-    ipv6 = "${facts.badb.ipv6_address}1";
   };
 
   services.web-key-directory = {
     enable = true;
     domain = facts.badb.domain;
     secretKeys = [ config.sops.secrets."gpg_keys/info.asc".path ];
-    ipv4 = facts.badb.ipv4_address;
-    ipv6 = "${facts.badb.ipv6_address}1";
   };
 
   services.nginx = {

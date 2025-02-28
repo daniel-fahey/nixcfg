@@ -19,20 +19,6 @@ in {
       description = "List of paths to sops secrets containing OpenPGP private keys";
       example = ''[ config.sops.secrets."gpg_keys/info".path ]'';
     };
-
-    ipv4 = mkOption {
-      type = types.str;
-      description = "IPv4 address to bind services to";
-      default = "0.0.0.0";
-    };
-
-    ipv6 = mkOption {
-      type = types.str;
-      description = "IPv6 address to bind services to";
-      default = "::";
-    };
-
-
   };
 
   config = mkIf cfg.enable {
@@ -123,10 +109,6 @@ in {
           try_files $uri =404;
         '';
       };
-
-      listenAddresses = [ cfg.ipv4 "[${cfg.ipv6}]" ];
     };
-
-
   };
 }

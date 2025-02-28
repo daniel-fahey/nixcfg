@@ -10,16 +10,6 @@ in {
       type = lib.types.str;
       description = "Domain name for the mail server";
     };
-
-    ipv4 = lib.mkOption {
-      type = lib.types.str;
-      description = "IPv4 address to bind services to";
-    };
-
-    ipv6 = lib.mkOption {
-      type = lib.types.str;
-      description = "IPv6 address to bind services to";
-    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -45,16 +35,16 @@ in {
           tls.enable = true;
           listener = {
             smtp = {
-              bind = [ "${cfg.ipv4}:25" "[${cfg.ipv6}]:25" ];
+              bind = [ "0.0.0.0:25" "[::]:25" ];
               protocol = "smtp";
             };
             submissions = {
-              bind = [ "${cfg.ipv4}:465" "[${cfg.ipv6}]:465" ];
+              bind = [ "0.0.0.0:465" "[::]:465" ];
               protocol = "smtp";
               tls.implicit = true;
             };
             imaps = {
-              bind = [ "${cfg.ipv4}:993" "[${cfg.ipv6}]:993" ];
+              bind = [ "0.0.0.0:993" "[::]:993" ];
               protocol = "imap";
               tls.implicit = true;
             };
@@ -85,7 +75,6 @@ in {
         "mail.${cfg.domain}" = {
           forceSSL = true;
           enableACME = true;
-          listenAddresses = [ cfg.ipv4 "[${cfg.ipv6}]" ];
           serverAliases = [
             "mta-sts.${cfg.domain}"
             "autoconfig.${cfg.domain}" 
@@ -96,8 +85,8 @@ in {
             proxyWebsockets = true;
           };
         };
-        };
       };
+    };
 
     networking.firewall.allowedTCPPorts = [ 25 465 993 ];
     users.users.stalwart-mail.extraGroups = [ config.services.nginx.group ];
